@@ -52,14 +52,13 @@ router.get("/filter/text", (req, res) => {
 
   Users.find({ [columnToFilter]: { $regex: `^${dataToMatch}` } })
     .sort({ [columnToOrderBy]: orderAscOrDec })
-    .skip(recordsPerPage * currentTablePage)
     .limit(recordsPerPage)
     .exec((err, users) => {
       if (err) {
         res.send("Not Filtered :(");
       } else {
         console.log(users);
-        res.send("Filtered!");
+        res.send(users);
       }
     });
 });
@@ -92,28 +91,28 @@ router.get("/filter/date", (req, res) => {
 });
 
 router.get("/paginate", (req, res) => {
-  const columnToOrderBy = req.query.column;
-  const orderAscOrDec = req.query.orderBy;
-  const recordsPerPage = req.query.recordsNumber;
-  const currentTablePage = req.query.pageNumber;
-  const recordsToSkip = recordsPerPage * currentTablePage;
+  const recordsPerPage = parseInt(req.query.recordsPerPage);
+  const currentTablePage = parseInt(req.query.pageNumber);
+  const orderAscOrDec = req.query.order;
+  const columnToOrderBy = req.query.orderBy;
 
   Users.find({})
-    .sort({ [columnToOrderBy]: [orderAscOrDec] })
-    .skip(recordsToSkip)
-    .limit(2)
+    .sort({ [columnToOrderBy]: orderAscOrDec })
+    .skip(recordsPerPage * currentTablePage)
+    .limit(recordsPerPage)
     .exec((err, users) => {
       if (err) {
-        res.send("Pagination Failed");
+        res.send("Not Filtered :(");
       } else {
-        res.status(201).send(users);
+        console.log(users);
+        res.send(users);
       }
     });
 });
 
-router.get("/sort", () => {
-  a;
-});
+// router.get("/sort", () => {
+  
+// });
 
 router.put("/:id/edit", (req, res) => {
   let userToEdit = req.params.id;
