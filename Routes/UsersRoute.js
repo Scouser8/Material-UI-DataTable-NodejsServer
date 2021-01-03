@@ -37,7 +37,7 @@ router.post("/add", (req, res) => {
   });
 });
 
-router.get("/filter/text", (req, res) => {
+router.get("/filter", (req, res) => {
   const columnToFilter = req.query.column;
   const dataToMatch = req.query.data;
   const recordsPerPage = parseInt(req.query.recordsPerPage);
@@ -59,33 +59,6 @@ router.get("/filter/text", (req, res) => {
       } else {
         console.log(users);
         res.send(users);
-      }
-    });
-});
-
-router.get("/filter/date", (req, res) => {
-  const columnToFilter = req.query.column;
-  const dataToMatch = req.query.data;
-  const recordsPerPage = parseInt(req.query.recordsPerPage);
-  const currentTablePage = parseInt(req.query.pageNumber);
-  const orderAscOrDec = req.query.order;
-  const columnToOrderBy = req.query.orderBy;
-
-  console.log(req.query);
-  console.log(dataToMatch);
-  console.log(recordsPerPage);
-  console.log(currentTablePage);
-
-  Users.find({ [columnToFilter]: dataToMatch })
-    .sort({ [columnToOrderBy]: orderAscOrDec })
-    .skip(recordsPerPage * currentTablePage)
-    .limit(recordsPerPage)
-    .exec((err, users) => {
-      if (err) {
-        res.send("Not Filtered :(");
-      } else {
-        console.log(users);
-        res.send("Filtered!");
       }
     });
 });
